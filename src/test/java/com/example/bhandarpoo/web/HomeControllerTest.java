@@ -22,41 +22,54 @@ class HomeControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    void homeShowsAllSections() throws Exception {
+    void homeShowsOnlyTheTwoProducts() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(Matchers.allOf(
-                        Matchers.containsString("Shop by Category"),
-                        Matchers.containsString("Latest Products"),
-                        Matchers.containsString("Online Puja Services"),
-                        Matchers.containsString("Knowledge Hub"))));
+                        Matchers.containsString("Our Products"),
+                        Matchers.containsString("Prabhu Prabhat 100% Pure Camphor (50 gm Box)"),
+                        Matchers.containsString("Prabhu Prabhat Dia Baati (100 pcs)"))));
     }
 
     @Test
-    void productsFilteredByCategory() throws Exception {
-        mockMvc.perform(get("/products").param("category", "attar"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(Matchers.containsString("Rose Attar")))
-                .andExpect(content().string(Matchers.not(Matchers.containsString("Tulsi Japa Mala"))));
-    }
-
-    @Test
-    void prabhuPrabhatProductsShowDiscountedPrices() throws Exception {
-        mockMvc.perform(get("/products").param("category", "puja-items"))
+    void showsBusinessContactDetails() throws Exception {
+        mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(Matchers.allOf(
-                        Matchers.containsString("Prabhu Prabhat 100% Pure Camphor (50 gm Box)"),
-                        Matchers.containsString("₹150"),
-                        Matchers.containsString("25% OFF"),
-                        Matchers.containsString("Prabhu Prabhat Dia Baati (100 pcs)"),
-                        Matchers.containsString("50% OFF"),
-                        Matchers.containsString("/images/products/prabhu-prabhat-camphor.svg"))));
+                        Matchers.containsString("mailto:prabhuprabhatpooja@gmail.com"),
+                        Matchers.containsString("tel:+919310321014"),
+                        Matchers.containsString("S206, Kapil Vihar, Sector-21C"),
+                        Matchers.containsString("Faridabad, Haryana – 121001"),
+                        Matchers.containsString("https://www.instagram.com/prabhuprabhatpooja/"),
+                        Matchers.containsString("https://www.facebook.com/prabhuprabhatpooja"))));
     }
 
     @Test
-    void unknownCategoryIsNotFound() throws Exception {
-        mockMvc.perform(get("/products").param("category", "nope"))
-                .andExpect(status().isNotFound());
+    void removedSectionsAreGone() throws Exception {
+        for (String path : new String[] {"/", "/products"}) {
+            mockMvc.perform(get(path))
+                    .andExpect(status().isOk())
+                    .andExpect(content().string(Matchers.not(Matchers.anyOf(
+                            Matchers.containsStringIgnoringCase("cart"),
+                            Matchers.containsStringIgnoringCase("online puja"),
+                            Matchers.containsStringIgnoringCase("knowledge hub"),
+                            Matchers.containsString("About Us"),
+                            Matchers.containsStringIgnoringCase("youtube"),
+                            Matchers.containsString("Privacy Policy"),
+                            Matchers.containsString("Shop by Category")))));
+        }
+    }
+
+    @Test
+    void productsPageShowsDiscountedPrices() throws Exception {
+        mockMvc.perform(get("/products"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(Matchers.allOf(
+                        Matchers.containsString("₹150"),
+                        Matchers.containsString("25% OFF"),
+                        Matchers.containsString("₹200"),
+                        Matchers.containsString("50% OFF"),
+                        Matchers.containsString("/images/products/prabhu-prabhat-camphor.svg"))));
     }
 
     @Test

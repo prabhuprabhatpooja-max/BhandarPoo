@@ -1,21 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Puja Items & Online Puja')}"></head>
+<head th:replace="~{fragments/layout :: head('Pure Puja Essentials')}"></head>
 <body>
 <header th:replace="~{fragments/layout :: header}"></header>
 
 <main>
     <!-- Hero -->
-    <section class="hero" id="about">
+    <section class="hero">
         <div class="container hero-inner">
             <div class="hero-text">
                 <span class="eyebrow">Welcome to Prabhu Prabhat Pooja World</span>
-                <h1>Everything for your puja, in one sacred place</h1>
-                <p>An online marketplace for Sanatan Dharma religious articles, devotional products and
-                    puja services. Authentic samagri, sourced with care and delivered to your door.</p>
+                <h1>Pure essentials for your daily puja</h1>
+                <p>Prabhu Prabhat brings you pure, quality puja essentials for every prayer at home and in the
+                    mandir, packed with care and delivered to your door.</p>
                 <div class="hero-actions">
                     <a th:href="@{/products}" class="btn btn-primary">Shop Products</a>
-                    <a href="#puja" class="btn btn-outline">Book Online Puja</a>
                 </div>
             </div>
             <div class="hero-art" aria-hidden="true">
@@ -24,95 +23,17 @@
         </div>
     </section>
 
-    <!-- Quick access -->
-    <section class="container quick-cards">
-        <a th:href="@{/products}" class="quick-card">
-            <span class="quick-icon">🛍️</span>
-            <div><h3>Products</h3><p>Puja items, malas, attar, books &amp; more</p></div>
-        </a>
-        <a href="#puja" class="quick-card">
-            <span class="quick-icon">🔥</span>
-            <div><h3>Online Puja</h3><p>Rituals performed by experienced pandits</p></div>
-        </a>
-        <a href="#blog" class="quick-card">
-            <span class="quick-icon">📖</span>
-            <div><h3>Knowledge Hub</h3><p>Guides on festivals, rituals and traditions</p></div>
-        </a>
-    </section>
-
-    <!-- Categories -->
-    <section class="section">
-        <div class="container">
-            <div class="section-heading">
-                <h2>Shop by Category</h2>
-                <div class="divider"><span>❖</span></div>
-            </div>
-            <div class="category-grid">
-                <a th:each="c : ${categories}" th:href="@{/products(category=${c.slug()})}" class="category-card">
-                    <span class="category-icon" th:text="${c.icon()}">🪔</span>
-                    <span th:text="${c.name()}">Category</span>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Latest products -->
+    <!-- Products -->
     <section class="section section-tinted">
         <div class="container">
             <div class="section-heading">
-                <h2>Latest Products</h2>
+                <h2>Our Products</h2>
                 <div class="divider"><span>❖</span></div>
             </div>
             <div class="product-grid">
-                <th:block th:each="p : ${latestProducts}">
+                <th:block th:each="p : ${products}">
                     <div th:replace="~{fragments/layout :: product-card(${p})}"></div>
                 </th:block>
-            </div>
-            <div class="center">
-                <a th:href="@{/products}" class="btn btn-outline">View All Products</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Online puja -->
-    <section class="section" id="puja">
-        <div class="container">
-            <div class="section-heading">
-                <h2>Online Puja Services</h2>
-                <p>Book a puja performed in your name by experienced pandits, with live streaming available.</p>
-                <div class="divider"><span>❖</span></div>
-            </div>
-            <div class="puja-grid">
-                <div th:each="s : ${pujaServices}" class="puja-card">
-                    <span class="puja-icon" th:text="${s.icon()}">🔥</span>
-                    <h3 th:text="${s.name()}">Puja</h3>
-                    <p th:text="${s.description()}">Description</p>
-                    <div class="puja-footer">
-                        <strong th:text="'₹' + ${#numbers.formatInteger(s.price(), 1, 'COMMA')}">₹2,100</strong>
-                        <a href="#contact" class="btn btn-small btn-primary">Book Now</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Blog -->
-    <section class="section section-tinted" id="blog">
-        <div class="container">
-            <div class="section-heading">
-                <h2>Knowledge Hub</h2>
-                <div class="divider"><span>❖</span></div>
-            </div>
-            <div class="blog-grid">
-                <article th:each="b : ${blogPosts}" class="blog-card">
-                    <div class="blog-image" th:text="${b.icon()}">🪔</div>
-                    <div class="blog-body">
-                        <time th:text="${#temporals.format(b.date(), 'dd MMM yyyy')}">01 Jan 2026</time>
-                        <h3 th:text="${b.title()}">Title</h3>
-                        <p th:text="${b.excerpt()}">Excerpt</p>
-                        <a href="#" class="read-more">Read more →</a>
-                    </div>
-                </article>
             </div>
         </div>
     </section>
