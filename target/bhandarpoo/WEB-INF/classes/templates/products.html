@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${title})}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main>
+    <section class="page-banner">
+        <div class="container">
+            <h1 th:text="${title}">All Products</h1>
+            <p class="breadcrumb"><a th:href="@{/}">Home</a> / <a th:href="@{/products}">Products</a>
+                <span th:if="${selected}" th:text="' / ' + ${selected.name()}"></span></p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container shop-layout">
+            <aside class="shop-sidebar">
+                <h4>Categories</h4>
+                <a th:href="@{/products}" th:classappend="${selected == null} ? 'active'">All Products</a>
+                <a th:each="c : ${categories}" th:href="@{/products(category=${c.slug()})}"
+                   th:classappend="${selected != null and selected.slug() == c.slug()} ? 'active'"
+                   th:text="${c.icon()} + ' ' + ${c.name()}">Category</a>
+            </aside>
+            <div>
+                <p class="result-count" th:text="${#lists.size(products)} + ' products'">0 products</p>
+                <div class="product-grid">
+                    <th:block th:each="p : ${products}">
+                        <div th:replace="~{fragments/layout :: product-card(${p})}"></div>
+                    </th:block>
+                </div>
+                <p th:if="${#lists.isEmpty(products)}">No products in this category yet.</p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
